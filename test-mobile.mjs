@@ -20,4 +20,11 @@ for (const id of ['#play-header', '#board', '#hand-black', '#hint-btn', '#reset-
 }
 console.log('errors after start:', errors);
 await page.screenshot({ path: '/private/tmp/273-mobile-play.png' });
+const first = await page.evaluate(() => window.PUZZLES[0].sol[0]);
+if (first.from < 0) await page.locator('#hand-black .hand-piece').filter({ hasText: '歩' }).click();
+else await page.locator('#board .cell').nth(first.from).click();
+await page.locator('#board .cell').nth(first.to).click();
+await page.waitForTimeout(2800);
+console.log('stage after tap:', await page.locator('#stage-no').textContent());
+console.log('errors after tap:', errors);
 await browser.close();
